@@ -20,11 +20,14 @@ RUN apt-get update \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+
     && composer install --no-interaction --no-dev
 
-# Generate example HTML at build time (combined in a single RUN)
-RUN php esc2html.php emulator_test.raw > salida.html
+# To use the web service, send a POST request to http://localhost:8080/esc2html_service.php with parameters 'esc' (base64 RAW) and 'width' (optional)
 
-# Expose a simple web server to view the generated HTML
+# Generate example HTML at build time (combined in a single RUN)
+RUN php esc2html.php receipt-with-logo.bin > output.html
+
+# Expose the web service for esc2html_service.php on port 8080
 EXPOSE 8080
 CMD ["php", "-S", "0.0.0.0:8080"]

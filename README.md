@@ -11,10 +11,10 @@ This fork adds a `Dockerfile` to simplify running the tools and exposing the HTM
 docker build -t escpos-tools-ws .
 
 # Run the container (exposes port 8080)
-docker run --rm -p 8080:8080 escpos-tools-ws
+docker run --rm --name escpos-tools-ws -p 8080:8080 escpos-tools-ws
 ```
 
-After running the container, open your browser and go to `http://localhost:8080/salida.html` to view the generated HTML from the sample ESC/POS file.
+After running the container, open your browser and go to `http://localhost:8080/output.html` to view the generated HTML from the sample ESC/POS file.
 
 Other improvements include code quality enhancements based on Sonar recommendations.
 
@@ -24,6 +24,19 @@ used for receipt printing.
 
 Currently we have a prototype ESC/POS parser, which can extract the commands
 contained in printable ESC/POS binary data, and render them to various formats.
+
+### Example: Calling the web service from JavaScript
+
+You can call the web service from your application using jQuery as follows:
+
+```js
+await $.post('http://localhost:8080/esc2html_service.php', {
+	esc: b64 ? data : base64EncodeUnicode(dataAux),
+	width: width
+}).done(function (response) {
+	displayEscPosLabel(response);
+});
+```
 
 ## Quick start
 
