@@ -5,7 +5,9 @@ FROM php:8.2-cli
 # Set working directory
 WORKDIR /app
 
-# Copy only composer files first for better cache usage
+
+# Copy vendor folder (dependencies) first for better cache usage
+COPY vendor/ ./vendor/
 COPY composer.json composer.lock ./
 
 # Install system dependencies and PHP extensions
