@@ -1,4 +1,5 @@
 # Dockerfile for escpos-tools
+# Dockerfile for escpos-tools
 FROM php:8.2-cli
 
 # Set working directory
@@ -21,11 +22,6 @@ RUN apt-get update \
     && pecl install imagick \
     && docker-php-ext-enable imagick
 
-# Install Composer ignoring SSL issues (for build only)
-RUN curl -fsSL --insecure https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-RUN composer --version \
-    && composer install --no-interaction --no-dev
 
 # Copy the rest of the application code
 COPY . .
