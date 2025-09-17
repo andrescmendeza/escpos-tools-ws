@@ -21,11 +21,11 @@ RUN apt-get update \
     && pecl install imagick \
     && docker-php-ext-enable imagick
 
-# Install Composer ignoring SSL issues (for build only)
-RUN curl -fsSL --insecure https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer --version \
-    && composer install --no-interaction --no-dev
+# Copy composer.phar and install dependencies
+COPY composer.phar /usr/local/bin/composer.phar
+RUN php /usr/local/bin/composer.phar --version \
+    && php /usr/local/bin/composer.phar install --no-interaction --no-dev
 
 # Copy the rest of the application code
 COPY . .
