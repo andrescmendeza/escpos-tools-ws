@@ -1,15 +1,16 @@
 # Dockerfile for escpos-tools
 FROM php:8.2-cli
 
-# Copy source code
+# Set working directory
 WORKDIR /app
-COPY . /app
 
-# Install Composer and required dependencies
+# Copy only composer files first for better cache usage
+COPY composer.json composer.lock ./
+
+# Install system dependencies and PHP extensions
 RUN apt-get update \
     && apt-get install -y \
         curl \
-        git \
         libmagickwand-dev \
         libpng-dev \
         libzip-dev \
@@ -20,8 +21,10 @@ RUN apt-get update \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-
     && composer install --no-interaction --no-dev
+
+# Copy the rest of the application code
+COPY . .
 
 # To use the web service, send a POST request to http://localhost:8080/esc2html_service.php with parameters 'esc' (base64 RAW) and 'width' (optional)
 

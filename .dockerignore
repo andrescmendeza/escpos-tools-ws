@@ -1,0 +1,11 @@
+.git
+node_modules
+*.log
+*.md
+tests
+doc
+.DS_Store
+.vscode
+.idea
+output.html
+emulator_test.raw
